@@ -1,0 +1,16 @@
+{
+  "name": "package-manager",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "ipc-main.js",
+  "devDependencies": {
+    "cross-zip": "^4.0.1",
+    "nodejs-file-downloader": "^4.13.0"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^11.2.0"
+  }
+}
