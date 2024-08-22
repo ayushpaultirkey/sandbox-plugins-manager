@@ -2,12 +2,12 @@ import path from "path";
 import fs from "fs/promises";
 import directory from "../../library/directory.js";
 
-const { __package } = directory();
+const { __packages } = directory();
 
 async function getMetadata(id) {
     try {
 
-        const meta = await fs.readFile(path.join(__package, id, "metadata.json"));
+        const meta = await fs.readFile(path.join(__packages, id, "metadata.json"));
         const metaJSON = JSON.parse(meta);
 
         return metaJSON;
@@ -22,7 +22,7 @@ async function getMetadata(id) {
 async function getIcon(id) {
     try {
 
-        const icon = await fs.readFile(path.join(__package, id, "favicon.png"));
+        const icon = await fs.readFile(path.join(__packages, id, "favicon.png"));
         return icon;
 
     }

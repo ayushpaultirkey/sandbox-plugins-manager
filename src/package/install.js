@@ -1,5 +1,8 @@
-import bundle from "./install/bundle.js";
+import bundle from "../library/bundle.js";
+import directory from "../library/directory.js";
 import installed from "./installed.js";
+
+const { __packages } = directory();
 
 async function install(url = "", callback) {
     try {
@@ -16,9 +19,9 @@ async function install(url = "", callback) {
 
         await bundle.extract(fileId, fileName);
 
-        const { id: packageId, name, icon } = await bundle.read(fileId);
+        const { id: packageId, name, icon } = await bundle.metadata(fileId);
 
-        await bundle.copy(fileId, packageId);
+        await bundle.copy(fileId, packageId, __packages);
         await bundle.cleanup(fileId, fileName);
 
         await installed.add(packageId, name, icon);

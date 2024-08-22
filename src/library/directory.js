@@ -15,10 +15,14 @@ export default function directory(dir = import.meta.url) {
     return {
         __filename: __filename,
         __dirname: __dirname,
-        __data: path.join(__dirname, root, "data"),
+        __data: {
+            __root: path.join(__dirname, root, "data"),
+            __packages: path.join(__dirname, root, "data/packages.json"),
+            __plugins: path.join(__dirname, root, "data/plugins.json"),
+        },
         __temp: path.join(__dirname, root, "temp"),
-        __installed: path.join(__dirname, root, "data/installed.json"),
-        __package: path.join(__dirname, root, "../../package"),
+        __packages: path.join(__dirname, root, "../../packages"),
+        __plugins: path.join(__dirname, root, "../../plugins"),
     };
 
 };

@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import directory from "../../library/directory.js";
 
-const {  __installed } = directory();
+const { __data: { __packages } } = directory();
 
 /**
     * 
@@ -9,7 +9,7 @@ const {  __installed } = directory();
 */
 async function hasFile() {
     try {
-        await fs.access(__installed);
+        await fs.access(__packages);
         return true;
     }
     catch(error) {
@@ -24,7 +24,7 @@ async function hasFile() {
 async function writeFile(data = {}) {
     try {
 
-        await fs.writeFile(__installed, JSON.stringify(data));
+        await fs.writeFile(__packages, JSON.stringify(data));
 
     }
     catch(error) {
@@ -43,7 +43,7 @@ async function readFile() {
         let installed = {};
 
         if(await hasFile()) {
-            const data = await fs.readFile(__installed);
+            const data = await fs.readFile(__packages);
             installed = JSON.parse(data.toString());
         }
         else {

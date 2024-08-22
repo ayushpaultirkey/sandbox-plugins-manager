@@ -51,7 +51,8 @@ async function getById(id) {
 
 /**
     * 
-    * @param {*} metadata 
+    * @param {*} id 
+    * @param {*} name 
     * @returns 
 */
 async function add(id, name) {

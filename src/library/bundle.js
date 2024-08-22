@@ -1,9 +1,11 @@
 import path from "path";
+import fs from "fs/promises";
+import fse from "fs-extra";
 import zip from "cross-zip";
 import crypto from "crypto";
 import Downloader from "nodejs-file-downloader";
 
-import directory from "../../library/directory.js";
+import directory from "./directory.js";
 
 const { __temp } = directory();
 
@@ -85,4 +87,63 @@ async function extract(tempId, bundleName) {
     }
 }
 
-export default { download, extract }
+
+/**
+    * 
+    * @param {*} tempId 
+    * @returns 
+*/
+async function metadata(tempId) {
+    try {
+        const data = await fs.readFile(path.join(__temp, tempId, "metadata.json"));
+        const meta = JSON.parse(data.toString());
+        if(!meta.id) {
+            throw new Error("No metadata id");
+        }
+        return meta;
+    }
+    catch(error) {
+        throw error;
+    }
+}
+
+
+/**
+    * 
+    * @param {*} tempId 
+    * @param {*} targetId 
+    * @param {*} root 
+*/
+async function copy(tempId, targetId, root) {
+    try {
+        const tempPath = path.join(__temp, tempId);
+        const targetPath = path.join(root, targetId);
+        await fse.copy(tempPath, targetPath);
+    }
+    catch(error) {
+        throw error;
+    }
+}
+
+
+/**
+    * 
+    * @param {*} tempId 
+    * @param {*} bundleName 
+*/
+async function cleanup(tempId, bundleName) {
+    try {
+
+        const tempPath = path.join(__temp, tempId);
+        const bundlePath = path.join(__temp, bundleName);
+
+        await fs.unlink(bundlePath);
+        await fs.rm(tempPath, { recursive: true, force: true });
+
+    }
+    catch(error) {
+        throw error;
+    }
+}
+
+export default { download, extract, metadata, cleanup, copy }

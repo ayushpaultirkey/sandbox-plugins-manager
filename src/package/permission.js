@@ -19,4 +19,13 @@ async function get(id) {
     }
 }
 
-export default { get }
+const enums = {
+    FILE_READ: 0,
+    FILE_WRITE: 1,
+    DIR_READ: 2,
+    DIR_WRITE: 3,
+    PACKAGE_INSTALL: 4,
+    PLUGIN_INSTALL: 5
+}
+
+export default { get, enums }
