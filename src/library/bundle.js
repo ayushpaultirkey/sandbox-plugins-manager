@@ -112,12 +112,12 @@ async function metadata(tempId) {
     * 
     * @param {*} tempId 
     * @param {*} targetId 
-    * @param {*} root 
+    * @param {*} target 
 */
-async function copy(tempId, targetId, root) {
+async function copy(tempId, targetId, target) {
     try {
         const tempPath = path.join(__temp, tempId);
-        const targetPath = path.join(root, targetId);
+        const targetPath = path.join(target, targetId);
         await fse.copy(tempPath, targetPath);
     }
     catch(error) {

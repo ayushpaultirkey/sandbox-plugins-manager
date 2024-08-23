@@ -1,6 +1,7 @@
 import bundle from "../library/bundle.js";
 import directory from "../library/directory.js";
-import installed from "./installed.js";
+import installed from "../library/installed.js";
+import pluginInstall from "./../plugin/install.js";
 
 const { __packages } = directory();
 
@@ -19,12 +20,14 @@ async function install(url = "", callback) {
 
         await bundle.extract(fileId, fileName);
 
-        const { id: packageId, name, icon } = await bundle.metadata(fileId);
+        const { id: packageId, name, plugins } = await bundle.metadata(fileId);
 
         await bundle.copy(fileId, packageId, __packages);
         await bundle.cleanup(fileId, fileName);
 
-        await installed.add(packageId, name, icon);
+        await pluginInstall(plugins);
+
+        await installed.add(packageId, name, installed.enums.PACKAGES);
 
     }
     catch(error) {

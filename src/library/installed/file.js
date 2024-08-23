@@ -1,15 +1,20 @@
 import fs from "fs/promises";
-import directory from "../../library/directory.js";
+import directory from "./../directory.js";
 
-const { __data: { __packages } } = directory();
+const { __data: { __packages, __plugins } } = directory();
+
+const enums = {
+    PLUGINS: __plugins,
+    PACKAGES: __packages,
+}
 
 /**
     * 
     * @returns 
 */
-async function hasFile() {
+async function hasFile(target = enums.PACKAGES) {
     try {
-        await fs.access(__packages);
+        await fs.access(target);
         return true;
     }
     catch(error) {
@@ -21,10 +26,10 @@ async function hasFile() {
     * 
     * @returns 
 */
-async function writeFile(data = {}) {
+async function writeFile(data = {}, target = enums.PACKAGES) {
     try {
 
-        await fs.writeFile(__packages, JSON.stringify(data));
+        await fs.writeFile(target, JSON.stringify(data));
 
     }
     catch(error) {
@@ -37,13 +42,13 @@ async function writeFile(data = {}) {
     * 
     * @returns 
 */
-async function readFile() {
+async function readFile(target = enums.PACKAGES) {
     try {
 
         let installed = {};
 
         if(await hasFile()) {
-            const data = await fs.readFile(__packages);
+            const data = await fs.readFile(target);
             installed = JSON.parse(data.toString());
         }
         else {
@@ -59,4 +64,4 @@ async function readFile() {
     }
 }
 
-export default { readFile, writeFile }
+export default { readFile, writeFile, enums }

@@ -1,4 +1,4 @@
-import installed from "./installed.js";
+import installed from "./../library/installed.js";
 
 /**
     * 
@@ -7,7 +7,7 @@ import installed from "./installed.js";
 async function get(id) {
     try {
 
-        const data = await installed.getById(id);
+        const data = await installed.getById(id, installed.enums.PACKAGES);
         if(data && data.permission) {
             return data.permission;
         }

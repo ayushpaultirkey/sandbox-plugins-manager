@@ -1,15 +1,10 @@
 import { ipcMain, dialog, BrowserWindow } from "electron";
-import path from "path";
-import fs from "fs/promises";
-import storage from "./../.bucket/storage.js";
+import storage from "../.bucket/storage.js";
 import install from "./src/package/install.js";
-import installed from "./src/package/installed.js";
+import installed from "./src/library/installed.js";
 import permission from "./src/package/permission.js";
-import directory from "./src/library/directory.js";
 
-const { __package } = directory();
-
-ipcMain.handle("@package-install", async(event, url) => {
+ipcMain.handle("@manager-package-install", async(event, url) => {
     try {
         
         const packageId = storage.get("@package-id");
@@ -46,7 +41,7 @@ ipcMain.handle("@package-install", async(event, url) => {
             }
 
         }
-        
+
         await install(url, (id, ... data) => {
             // event.sender.send(id, ... data);
         });
@@ -58,9 +53,9 @@ ipcMain.handle("@package-install", async(event, url) => {
     }
 });
 
-ipcMain.handle("@package-getInstalled", async(event) => {
+ipcMain.handle("@manager-package-getInstalled", async(event) => {
     try {
-        return await installed.get();
+        return await installed.get(installed.enums.PACKAGES);
     }
     catch(error) {
         console.log(error);
@@ -68,9 +63,10 @@ ipcMain.handle("@package-getInstalled", async(event) => {
     }
 });
 
-ipcMain.handle("@package-getInstalledMetadata", async(event, id) => {
+ipcMain.handle("@manager-package-getInstalledMetadata", async(event, id) => {
     try {
-        const metadata = await installed.getMetadata(id);
+        const { data: { getMetadata, enums } } = installed;
+        const metadata = await getMetadata(id, enums.PACKAGES);
         return metadata;
     }
     catch(error) {
@@ -79,9 +75,10 @@ ipcMain.handle("@package-getInstalledMetadata", async(event, id) => {
     }
 });
 
-ipcMain.handle("@package-getInstalledIcon", async(event, id) => {
+ipcMain.handle("@manager-package-getInstalledIcon", async(event, id) => {
     try {
-        const icon = await installed.getIcon(id);
+        const { data: { getIcon, enums } } = installed;
+        const icon = await getIcon(id, enums.PACKAGES);
         return icon.toString("base64");
     }
     catch(error) {
@@ -93,7 +90,7 @@ ipcMain.handle("@package-getInstalledIcon", async(event, id) => {
 /**
     * Registers a package if its not installed
 */
-ipcMain.handle("@package-validate", async(event) => {
+ipcMain.handle("@manager-package-validate", async(event) => {
     try {
         
         // Get current package's id and check
@@ -105,12 +102,36 @@ ipcMain.handle("@package-validate", async(event) => {
 
         // Check if the package is installed
         // if not then register it
-        const data = await installed.getById(packageId);
+        const data = await installed.getById(packageId, installed.enums.PACKAGES);
+
         if(!data) {
-            const { name } = await installed.getMetadata(packageId);
-            await installed.add(packageId, name);
+            const { name } = await installed.data.getMetadata(packageId, installed.data.enums.PACKAGES);
+            await installed.add(packageId, name, installed.enums.PACKAGES);
         }
 
+    }
+    catch(error) {
+        console.log(error);
+        throw error;
+    }
+});
+
+
+ipcMain.handle("@manager-plugin-getInstalled", async(event) => {
+    try {
+        return await installed.get(installed.enums.PLUGINS);
+    }
+    catch(error) {
+        console.log(error);
+        throw error;
+    }
+});
+
+ipcMain.handle("@manager-plugin-getInstalledMetadata", async(event, id) => {
+    try {
+        const { data: { getMetadata, enums } } = installed;
+        const metadata = await getMetadata(id, enums.PLUGINS);
+        return metadata;
     }
     catch(error) {
         console.log(error);

@@ -1,4 +1,11 @@
 {
-    "id": "@package",
-    "name": "package-manager"
+    "id": "manager",
+    "name": "manager",
+    "author": "ayushpaultirkey",
+    "description": "",
+    "version": "1.0",
+    "repository": {
+        "url": "https://github.com/ayushpaultirkey/sandbox-plugins-manager",
+        "branch": "master"
+    }
 }

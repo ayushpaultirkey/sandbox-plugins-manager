@@ -1,16 +1,24 @@
 {
-  "name": "package-manager",
+  "name": "manager",
   "version": "1.0.0",
   "description": "",
   "type": "module",
   "main": "ipc-main.js",
-  "devDependencies": {
-    "cross-zip": "^4.0.1",
-    "nodejs-file-downloader": "^4.13.0"
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "fs-extra": "^11.2.0"
+    "cross-zip": "^4.0.1",
+    "fs-extra": "^11.2.0",
+    "nodejs-file-downloader": "^4.13.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-replace": "^5.0.7",
+    "rollup": "^4.21.0"
   }
 }

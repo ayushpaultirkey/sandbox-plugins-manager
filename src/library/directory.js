@@ -10,7 +10,7 @@ export default function directory(dir = import.meta.url) {
 
     const __filename = url.fileURLToPath(dir);
     const __dirname = path.dirname(__filename);
-    const root = "../../";
+    const root = (typeof(PLUGIN_ROOT) !== "undefined") ? PLUGIN_ROOT : "../../";
 
     return {
         __filename: __filename,
